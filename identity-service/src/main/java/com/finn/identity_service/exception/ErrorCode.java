@@ -1,29 +1,30 @@
 package com.finn.identity_service.exception;
 
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+
+@Getter
 public enum ErrorCode {
-    UNCATEGORIZED_EXCEPTION(400, "Uncategorized error"),
-    INVALID_KEY(400, "Invalid message key"),
-    USER_ALREADY_EXISTS(400, "User already exists"),
-    USER_NOT_FOUND(404, "User not found"),
-    INVALID_USERNAME(400, "Username must be at least 3 characters"),
-    INVALID_PASSWORD(400, "Password must be at least 8 characters"),
-    INVALID_DOB(400, "Date of birth must be in the past"),
-    UNAUTHENTICATED(401, "Unauthenticated")
+    UNCATEGORIZED_EXCEPTION(1, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
+    INVALID_KEY(2, "Invalid message key", HttpStatus.BAD_REQUEST),
+    USER_ALREADY_EXISTS(3, "User already exists", HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND(4, "User not found", HttpStatus.NOT_FOUND),
+    INVALID_USERNAME(5, "Username must be at least 3 characters", HttpStatus.BAD_REQUEST),
+    INVALID_PASSWORD(6, "Password must be at least 8 characters", HttpStatus.BAD_REQUEST),
+    INVALID_DOB(7, "Date of birth must be in the past", HttpStatus.BAD_REQUEST),
+    UNAUTHENTICATED(8, "Authentication is required", HttpStatus.UNAUTHORIZED),
+    UNAUTHORIZED(9, "You do not have permission to access this resource", HttpStatus.FORBIDDEN),
     ;
 
-    ErrorCode(int code, String message) {
+    ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
         this.message = message;
+        this.statusCode = statusCode;
     }
 
     private int code;
     private String message;
+    private HttpStatusCode statusCode;
 
-    public int getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }
