@@ -6,7 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,11 +21,10 @@ public class UserCreationRequest {
     String password;
 
     String firstName;
-
     String lastName;
 
     @Past(message = "INVALID_DOB")
     LocalDate dob;
 
-    Set<String> roles;
+    List<String> roles;
 }
