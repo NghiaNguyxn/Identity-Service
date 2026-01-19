@@ -1,5 +1,6 @@
 package com.finn.identity_service.dto.request;
 
+import com.finn.identity_service.validator.DobConstraint;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -24,8 +25,6 @@ public class UserCreationRequest {
 
     String lastName;
 
-    @Past(message = "INVALID_DOB")
+    @DobConstraint(min = 18, message = "INVALID_DOB")
     LocalDate dob;
-
-    Set<String> roles;
 }
