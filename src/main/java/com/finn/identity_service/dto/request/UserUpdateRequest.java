@@ -1,10 +1,11 @@
 package com.finn.identity_service.dto.request;
 
+import com.finn.identity_service.validator.DobConstraint;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Builder
@@ -15,7 +16,10 @@ public class UserUpdateRequest {
     String password;
     String firstName;
     String lastName;
+
+    @DobConstraint(min = 16, message = "INVALID_DOB")
     LocalDate dob;
-    Set<String> roles;
+
+    List<String> roles;
 }
 
