@@ -4,10 +4,11 @@ import com.finn.identity_service.dto.request.UserCreationRequest;
 import com.finn.identity_service.dto.request.UserUpdateRequest;
 import com.finn.identity_service.dto.response.UserResponse;
 import com.finn.identity_service.entity.User;
-import com.finn.identity_service.enums.Role;
+import com.finn.identity_service.entity.Role;
 import com.finn.identity_service.exception.AppException;
 import com.finn.identity_service.exception.ErrorCode;
 import com.finn.identity_service.mapper.UserMapper;
+import com.finn.identity_service.repository.RoleRepository;
 import com.finn.identity_service.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ import java.util.List;
 public class UserService {
 
     UserRepository userRepository;
+    RoleRepository roleRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
@@ -40,8 +42,8 @@ public class UserService {
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        HashSet<String> roles = new HashSet<>();
-        roles.add(Role.USER.name());
+        HashSet<Role> roles = new HashSet<>();
+        roleRepository.findById("USER").ifPresent(roles::add);
 
         user.setRoles(roles);
 
@@ -76,6 +78,10 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         userMapper.updateUser(user, request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        var roles = roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
