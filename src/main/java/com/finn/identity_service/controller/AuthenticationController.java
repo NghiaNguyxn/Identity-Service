@@ -3,6 +3,7 @@ package com.finn.identity_service.controller;
 import com.finn.identity_service.dto.request.ApiResponse;
 import com.finn.identity_service.dto.request.AuthenticationRequest;
 import com.finn.identity_service.dto.request.IntrospectRequest;
+import com.finn.identity_service.dto.request.LogoutRequest;
 import com.finn.identity_service.dto.response.AuthenticationResponse;
 import com.finn.identity_service.dto.response.IntrospectResponse;
 import com.finn.identity_service.service.AuthenticationService;
@@ -39,6 +40,15 @@ public class AuthenticationController {
 
         return ApiResponse.<IntrospectResponse>builder()
                 .result(result)
+                .build();
+    }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
+        authenticationService.logout(request);
+
+        return ApiResponse.<Void>builder()
+                .message("Logout successfully")
                 .build();
     }
 
