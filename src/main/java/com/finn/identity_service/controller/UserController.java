@@ -4,14 +4,12 @@ import com.finn.identity_service.dto.request.ApiResponse;
 import com.finn.identity_service.dto.request.UserCreationRequest;
 import com.finn.identity_service.dto.request.UserUpdateRequest;
 import com.finn.identity_service.dto.response.UserResponse;
-import com.finn.identity_service.entity.User;
 import com.finn.identity_service.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +25,8 @@ public class UserController {
 
     @PostMapping
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request){
+        log.info("Controller: create user");
+
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
 
         apiResponse.setResult(userService.createUser(request));
@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    ApiResponse<UserResponse> getUser(@PathVariable("userId") String userId){
+    ApiResponse<UserResponse> getUser(@PathVariable String userId){
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getUser(userId))
                 .build();
@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    ApiResponse<UserResponse> updateUser(@PathVariable("userId") String userId, @RequestBody UserUpdateRequest request){
+    ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request){
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userId, request))
                 .build();
