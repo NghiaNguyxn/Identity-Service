@@ -1,9 +1,7 @@
 package com.finn.identity_service.controller;
 
-import com.finn.identity_service.dto.request.UserCreationRequest;
-import com.finn.identity_service.dto.response.UserResponse;
-import com.finn.identity_service.service.UserService;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -17,9 +15,13 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import tools.jackson.databind.ObjectMapper;
 
-import java.time.LocalDate;
+import com.finn.identity_service.dto.request.UserCreationRequest;
+import com.finn.identity_service.dto.response.UserResponse;
+import com.finn.identity_service.service.UserService;
+
+import lombok.extern.slf4j.Slf4j;
+import tools.jackson.databind.ObjectMapper;
 
 @Slf4j
 @SpringBootTest
@@ -37,7 +39,7 @@ public class UserControllerTest {
     private UserResponse userResponse;
 
     @BeforeEach
-    void initData(){
+    void initData() {
         LocalDate dob = LocalDate.of(2000, 1, 1);
 
         request = UserCreationRequest.builder()
@@ -63,21 +65,15 @@ public class UserControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String content = objectMapper.writeValueAsString(request);
 
-        Mockito.when(userService.createUser(ArgumentMatchers.any()))
-                        .thenReturn(userResponse);
+        Mockito.when(userService.createUser(ArgumentMatchers.any())).thenReturn(userResponse);
 
         // WHEN, THEN
-        mockMvc.perform(MockMvcRequestBuilders
-                    .post("/users")
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .content(content)
-                )
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(content))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("code")
-                        .value("200"))
-                .andExpect(MockMvcResultMatchers.jsonPath("result.id")
-                        .value("1fa3587d6084"));
-
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value("200"))
+                .andExpect(MockMvcResultMatchers.jsonPath("result.id").value("1fa3587d6084"));
     }
 
     @Test
@@ -88,17 +84,12 @@ public class UserControllerTest {
         String content = objectMapper.writeValueAsString(request);
 
         // WHEN, THEN
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/users")
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(content)
-                )
+                        .content(content))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("code")
-                        .value("5"))
-                .andExpect(MockMvcResultMatchers.jsonPath("message")
-                        .value("Username must be at least 3 characters"));
-
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value("5"))
+                .andExpect(MockMvcResultMatchers.jsonPath("message").value("Username must be at least 3 characters"));
     }
 
     @Test
@@ -107,16 +98,12 @@ public class UserControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String content = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/users")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(content)
-                )
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(content))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("code")
-                        .value("6"))
-                .andExpect(MockMvcResultMatchers.jsonPath("message")
-                        .value("Password must be at least 8 characters"));
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value("6"))
+                .andExpect(MockMvcResultMatchers.jsonPath("message").value("Password must be at least 8 characters"));
     }
 
     @Test
@@ -125,16 +112,11 @@ public class UserControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String content = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/users")
-                .content(content)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("code")
-                        .value("7"))
-                .andExpect(MockMvcResultMatchers.jsonPath("message")
-                        .value("User must be at least 16 years old"));
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value("7"))
+                .andExpect(MockMvcResultMatchers.jsonPath("message").value("User must be at least 16 years old"));
     }
-
 }

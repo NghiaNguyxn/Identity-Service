@@ -1,6 +1,7 @@
 package com.finn.identity_service.configuration;
 
-import lombok.RequiredArgsConstructor;
+import javax.crypto.spec.SecretKeySpec;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +11,7 @@ import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 
-import javax.crypto.spec.SecretKeySpec;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Configuration
@@ -19,11 +20,10 @@ import javax.crypto.spec.SecretKeySpec;
 public class JwtConfig {
 
     @Bean("nimbusJwtDecoder")
-    public JwtDecoder jwtDecoder(@Value("${jwt.signerKey}") String signerKey){
+    public JwtDecoder jwtDecoder(@Value("${jwt.signerKey}") String signerKey) {
         SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS256");
 
-        return NimbusJwtDecoder
-                .withSecretKey(secretKeySpec)
+        return NimbusJwtDecoder.withSecretKey(secretKeySpec)
                 .macAlgorithm(MacAlgorithm.HS256)
                 .build();
     }

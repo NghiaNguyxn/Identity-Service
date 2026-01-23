@@ -3,11 +3,9 @@ package com.finn.identity_service.service;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
-import com.finn.identity_service.dto.request.UserCreationRequest;
-import com.finn.identity_service.dto.response.UserResponse;
-import com.finn.identity_service.entity.User;
-import com.finn.identity_service.exception.AppException;
-import com.finn.identity_service.repository.UserRepository;
+import java.time.LocalDate;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,8 +15,11 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import java.time.LocalDate;
-import java.util.Optional;
+import com.finn.identity_service.dto.request.UserCreationRequest;
+import com.finn.identity_service.dto.response.UserResponse;
+import com.finn.identity_service.entity.User;
+import com.finn.identity_service.exception.AppException;
+import com.finn.identity_service.repository.UserRepository;
 
 @SpringBootTest
 @TestPropertySource("/test.properties")
@@ -36,7 +37,7 @@ public class UserServiceTest {
     private LocalDate dob;
 
     @BeforeEach
-    void initData(){
+    void initData() {
         dob = LocalDate.of(2000, 1, 1);
 
         request = UserCreationRequest.builder()
@@ -65,12 +66,10 @@ public class UserServiceTest {
     }
 
     @Test
-    void createUser_validRequest_success(){
+    void createUser_validRequest_success() {
         // GIVEN
-        when(userRepository.existsByUsername(anyString()))
-                .thenReturn(false);
-        when(userRepository.save(any()))
-                .thenReturn(user);
+        when(userRepository.existsByUsername(anyString())).thenReturn(false);
+        when(userRepository.save(any())).thenReturn(user);
 
         // WHEN
         var response = userService.createUser(request);
@@ -82,22 +81,18 @@ public class UserServiceTest {
     }
 
     @Test
-    void createUser_userExists_fail(){
-        when(userRepository.existsByUsername(anyString()))
-                .thenReturn(true);
+    void createUser_userExists_fail() {
+        when(userRepository.existsByUsername(anyString())).thenReturn(true);
 
-        var exception = Assertions.assertThrows(AppException.class,
-                () -> userService.createUser(request));
+        var exception = Assertions.assertThrows(AppException.class, () -> userService.createUser(request));
 
         Assertions.assertEquals(3, exception.getErrorCode().getCode());
-
     }
 
     @Test
     @WithMockUser(username = "test")
-    void getMyInfo_valid_success(){
-        when(userRepository.findByUsername(anyString()))
-                .thenReturn(Optional.of(user));
+    void getMyInfo_valid_success() {
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 
         var response = userService.getMyInfo();
 
@@ -107,15 +102,12 @@ public class UserServiceTest {
 
     @Test
     @WithMockUser(username = "test")
-    void getMyInfo_userNotFound_fail(){
-        when(userRepository.findByUsername(anyString()))
-                .thenReturn(Optional.empty());
+    void getMyInfo_userNotFound_fail() {
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
 
-        var exception = Assertions.assertThrows(AppException.class,
-                () -> userService.getMyInfo());
+        var exception = Assertions.assertThrows(AppException.class, () -> userService.getMyInfo());
 
         Assertions.assertEquals(4, exception.getErrorCode().getCode());
         Assertions.assertEquals("User not found", exception.getErrorCode().getMessage());
     }
-
 }

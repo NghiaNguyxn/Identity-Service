@@ -1,27 +1,34 @@
 package com.finn.identity_service.configuration;
 
-import com.finn.identity_service.dto.request.ApiResponse;
-import com.finn.identity_service.exception.ErrorCode;
-import jakarta.servlet.ServletException;
+import java.io.IOException;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import tools.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
+import com.finn.identity_service.dto.request.ApiResponse;
+import com.finn.identity_service.exception.ErrorCode;
+
+import tools.jackson.databind.ObjectMapper;
 
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+    public void commence(
+            @NonNull HttpServletRequest request,
+            HttpServletResponse response,
+            @NonNull AuthenticationException authException)
+            throws IOException {
 
         ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
 
         response.setStatus(errorCode.getStatusCode().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        ApiResponse apiResponse = ApiResponse.builder()
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
                 .build();
