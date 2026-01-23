@@ -1,7 +1,6 @@
 package com.finn.identity_service.service;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 import com.finn.identity_service.dto.request.UserCreationRequest;
@@ -14,10 +13,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @SpringBootTest
 @TestPropertySource("/test.properties")
@@ -90,6 +91,31 @@ public class UserServiceTest {
 
         Assertions.assertEquals(3, exception.getErrorCode().getCode());
 
+    }
+
+    @Test
+    @WithMockUser(username = "test")
+    void getMyInfo_valid_success(){
+        when(userRepository.findByUsername(anyString()))
+                .thenReturn(Optional.of(user));
+
+        var response = userService.getMyInfo();
+
+        Assertions.assertEquals(user.getUsername(), response.getUsername());
+        Assertions.assertEquals(user.getId(), response.getId());
+    }
+
+    @Test
+    @WithMockUser(username = "test")
+    void getMyInfo_userNotFound_fail(){
+        when(userRepository.findByUsername(anyString()))
+                .thenReturn(Optional.empty());
+
+        var exception = Assertions.assertThrows(AppException.class,
+                () -> userService.getMyInfo());
+
+        Assertions.assertEquals(4, exception.getErrorCode().getCode());
+        Assertions.assertEquals("User not found", exception.getErrorCode().getMessage());
     }
 
 }
