@@ -1,8 +1,7 @@
 package com.finn.identity_service.controller;
 
-import com.finn.identity_service.dto.request.UserCreationRequest;
-import com.finn.identity_service.dto.response.UserResponse;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.mysql.MySQLContainer;
-import tools.jackson.databind.ObjectMapper;
 
-import java.time.LocalDate;
+import com.finn.identity_service.dto.request.UserCreationRequest;
+import com.finn.identity_service.dto.response.UserResponse;
+
+import lombok.extern.slf4j.Slf4j;
+import tools.jackson.databind.ObjectMapper;
 
 @Slf4j
 @SpringBootTest
@@ -31,7 +33,7 @@ public class UserControllerIntegrationTest {
     static final MySQLContainer MY_SQL_CONTAINER = new MySQLContainer("mysql:latest");
 
     @DynamicPropertySource
-    static void configureDatasource(DynamicPropertyRegistry registry){
+    static void configureDatasource(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", MY_SQL_CONTAINER::getJdbcUrl);
         registry.add("spring.datasource.username", MY_SQL_CONTAINER::getUsername);
         registry.add("spring.datasource.password", MY_SQL_CONTAINER::getPassword);
@@ -46,7 +48,7 @@ public class UserControllerIntegrationTest {
     private UserResponse userResponse;
 
     @BeforeEach
-    void initData(){
+    void initData() {
         LocalDate dob = LocalDate.of(2000, 1, 1);
 
         request = UserCreationRequest.builder()
@@ -73,22 +75,15 @@ public class UserControllerIntegrationTest {
         String content = objectMapper.writeValueAsString(request);
 
         // WHEN, THEN
-        var response = mockMvc.perform(MockMvcRequestBuilders
-                    .post("/users")
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .content(content)
-                )
+        var response = mockMvc.perform(MockMvcRequestBuilders.post("/users")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(content))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("code")
-                        .value("200"))
-                .andExpect(MockMvcResultMatchers.jsonPath("result.username")
-                        .value("test"))
-                .andExpect(MockMvcResultMatchers.jsonPath("result.firstName")
-                        .value("Test"))
-                .andExpect(MockMvcResultMatchers.jsonPath("result.lastName")
-                        .value("User"));
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value("200"))
+                .andExpect(MockMvcResultMatchers.jsonPath("result.username").value("test"))
+                .andExpect(MockMvcResultMatchers.jsonPath("result.firstName").value("Test"))
+                .andExpect(MockMvcResultMatchers.jsonPath("result.lastName").value("User"));
 
         log.info("Result: {}", response.andReturn().getResponse().getContentAsString());
     }
-
 }

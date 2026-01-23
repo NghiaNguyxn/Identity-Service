@@ -1,11 +1,12 @@
 package com.finn.identity_service.dto.request;
 
-import com.finn.identity_service.validator.DobConstraint;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.time.LocalDate;
 import java.util.List;
+
+import com.finn.identity_service.validator.DobConstraint;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @Builder
@@ -22,4 +23,3 @@ public class UserUpdateRequest {
 
     List<String> roles;
 }
-

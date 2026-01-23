@@ -1,8 +1,9 @@
 package com.finn.identity_service.exception;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+
+import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
@@ -17,14 +18,13 @@ public enum ErrorCode {
     UNAUTHORIZED(9, "You do not have permission to access this resource", HttpStatus.FORBIDDEN),
     ;
 
+    private final int code;
+    private final String message;
+    private final HttpStatusCode statusCode;
+
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
         this.message = message;
         this.statusCode = statusCode;
     }
-
-    private int code;
-    private String message;
-    private HttpStatusCode statusCode;
-
 }

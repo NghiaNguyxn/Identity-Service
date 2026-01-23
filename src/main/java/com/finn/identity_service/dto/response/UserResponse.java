@@ -1,10 +1,10 @@
 package com.finn.identity_service.dto.response;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.time.LocalDate;
 import java.util.Set;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @Builder
@@ -14,7 +14,7 @@ import java.util.Set;
 public class UserResponse {
     String id;
     String username;
-//    String password;
+    //    String password;
     String firstName;
     String lastName;
     LocalDate dob;
