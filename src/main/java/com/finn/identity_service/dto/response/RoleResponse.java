@@ -1,10 +1,9 @@
 package com.finn.identity_service.dto.response;
 
-import com.finn.identity_service.entity.Permission;
+import java.util.Set;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Data
 @Builder
@@ -16,5 +15,4 @@ public class RoleResponse {
     String name;
     String description;
     Set<PermissionResponse> permissions;
-
 }
