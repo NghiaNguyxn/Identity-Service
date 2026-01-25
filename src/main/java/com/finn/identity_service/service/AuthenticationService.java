@@ -48,7 +48,23 @@ public class AuthenticationService {
 
     @NonFinal
     @Value("${jwt.signerKey}")
-    protected String SIGNER_KEY;
+    protected static String SIGNER_KEY;
+
+    @NonFinal
+    @Value("${jwt.expiration}")
+    protected static long EXPIRATION;
+
+    @NonFinal
+    @Value("${jwt.refresh-token-expiration}")
+    protected static long REFRESH_TOKEN_EXPIRATION;
+
+    @NonFinal
+    @Value("${jwt.expiration}")
+    protected long EXPIRATION;
+
+    @NonFinal
+    @Value("${jwt.refresh-token-expiration}")
+    protected long REFRESH_TOKEN_EXPIRATION;
 
     @NonFinal
     @Value("${jwt.expiration}")

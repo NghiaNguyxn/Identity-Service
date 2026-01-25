@@ -23,7 +23,7 @@ import com.finn.identity_service.repository.UserRepository;
 
 @SpringBootTest
 @TestPropertySource("/test.properties")
-public class UserServiceTest {
+class UserServiceTest {
 
     @Autowired
     private UserService userService;

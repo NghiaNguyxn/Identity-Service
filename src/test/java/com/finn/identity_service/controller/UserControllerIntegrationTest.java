@@ -27,7 +27,7 @@ import tools.jackson.databind.ObjectMapper;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Testcontainers
-public class UserControllerIntegrationTest {
+class UserControllerIntegrationTest {
 
     @Container
     static final MySQLContainer MY_SQL_CONTAINER = new MySQLContainer("mysql:latest");
