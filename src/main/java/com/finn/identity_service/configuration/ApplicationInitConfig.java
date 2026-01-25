@@ -26,6 +26,10 @@ public class ApplicationInitConfig {
 
     PasswordEncoder passwordEncoder;
 
+    static final String ADMIN_USERNAME = "admin";
+
+    static final String ADMIN_PASSWORD= "admin";
+
     @Bean
     @ConditionalOnProperty(
             prefix = "spring",
@@ -35,7 +39,7 @@ public class ApplicationInitConfig {
         log.info("Init application...");
 
         return args -> {
-            if (userRepository.findByUsername("admin").isEmpty()) {
+            if (userRepository.findByUsername(ADMIN_USERNAME).isEmpty()) {
                 roleRepository.save(
                         Role.builder().name("USER").description("User role").build());
 
@@ -46,8 +50,8 @@ public class ApplicationInitConfig {
                 roles.add(adminRole);
 
                 User user = User.builder()
-                        .username("admin")
-                        .password(passwordEncoder.encode(("admin")))
+                        .username(ADMIN_USERNAME)
+                        .password(passwordEncoder.encode((ADMIN_PASSWORD)))
                         .roles(roles)
                         .build();
 
