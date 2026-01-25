@@ -48,15 +48,15 @@ public class AuthenticationService {
 
     @NonFinal
     @Value("${jwt.signerKey}")
-    protected String SIGNER_KEY;
+    protected static String SIGNER_KEY;
 
     @NonFinal
     @Value("${jwt.expiration}")
-    protected long EXPIRATION;
+    protected static long EXPIRATION;
 
     @NonFinal
     @Value("${jwt.refresh-token-expiration}")
-    protected long REFRESH_TOKEN_EXPIRATION;
+    protected static long REFRESH_TOKEN_EXPIRATION;
 
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
