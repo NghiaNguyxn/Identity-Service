@@ -66,6 +66,14 @@ public class AuthenticationService {
     @Value("${jwt.refresh-token-expiration}")
     protected long REFRESH_TOKEN_EXPIRATION;
 
+    @NonFinal
+    @Value("${jwt.expiration}")
+    protected long EXPIRATION;
+
+    @NonFinal
+    @Value("${jwt.refresh-token-expiration}")
+    protected long REFRESH_TOKEN_EXPIRATION;
+
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
 
