@@ -39,8 +39,8 @@ public class UserService {
     PasswordEncoder passwordEncoder;
 
     public UserResponse createUser(UserCreationRequest request) {
-//        if (userRepository.existsByUsername(request.getUsername()))
-//            throw new AppException(ErrorCode.USER_ALREADY_EXISTS);
+        //        if (userRepository.existsByUsername(request.getUsername()))
+        //            throw new AppException(ErrorCode.USER_ALREADY_EXISTS);
 
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -52,7 +52,7 @@ public class UserService {
 
         try {
             user = userRepository.save(user);
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.USER_ALREADY_EXISTS);
         }
 
