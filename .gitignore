@@ -33,6 +33,7 @@ build/
 .vscode/
 
 application.yaml
+application-prod.yaml
 
 *.log
 logs/
