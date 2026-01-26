@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -82,7 +83,7 @@ class UserServiceTest {
 
     @Test
     void createUser_userExists_fail() {
-        when(userRepository.existsByUsername(anyString())).thenReturn(true);
+        when(userRepository.save(any())).thenThrow(DataIntegrityViolationException.class);
 
         var exception = Assertions.assertThrows(AppException.class, () -> userService.createUser(request));
 
