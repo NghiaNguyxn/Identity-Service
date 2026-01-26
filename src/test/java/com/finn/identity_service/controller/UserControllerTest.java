@@ -22,6 +22,7 @@ import com.finn.identity_service.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @Slf4j
 @SpringBootTest
@@ -62,7 +63,7 @@ class UserControllerTest {
     @Test
     void createUser_validRequest_success() throws Exception {
         // GIVEN
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = JsonMapper.builder().build();
         String content = objectMapper.writeValueAsString(request);
 
         Mockito.when(userService.createUser(ArgumentMatchers.any())).thenReturn(userResponse);
@@ -80,7 +81,7 @@ class UserControllerTest {
     void createUser_invalidUsername_fail() throws Exception {
         // GIVEN
         request.setUsername("te");
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = JsonMapper.builder().build();
         String content = objectMapper.writeValueAsString(request);
 
         // WHEN, THEN
